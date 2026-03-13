@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>ROTA 66 — GUIA 21 DIAS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --bg: #05060a;
+      --card: rgba(18, 22, 33, 0.9);
+      --accent: #ffb347;
+      --accent-soft: rgba(255, 179, 71, 0.12);
+      --text: #f5f5f7;
+      --muted: #a0a4b8;
+      --border: rgba(255, 255, 255, 0.06);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top, #151827 0, #05060a 55%, #020308 100%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    header {
+      background: linear-gradient(135deg, rgba(255, 179, 71, 0.18), rgba(255, 255, 255, 0.02));
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      border: 1px solid rgba(255, 179, 71, 0.35);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    header h1 {
+      font-size: 1.2rem;
+      letter-spacing: 0.12em;
+      color: var(--text);
+    }
+
+    header p {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      backdrop-filter: blur(18px);
+    }
+
+    .panel-title {
+      font-size: 0.9rem;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .days-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .day-card {
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 10px;
+      background: radial-gradient(circle at top left, rgba(255, 179, 71, 0.12), rgba(10, 12, 20, 0.96));
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .day-main {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .places {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .place-pill {
+      font-size: 0.78rem;
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(5, 6, 10, 0.7);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s ease-out;
+      white-space: nowrap;
+    }
+
+    .place-pill:hover {
+      border-color: rgba(255, 179, 71, 0.7);
+      color: var(--accent);
+      background: rgba(255, 179, 71, 0.08);
+    }
+
+    .place-pill.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .detail-header {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .detail-label {
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+    }
+
+    .detail-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .detail-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .detail-body {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 12px;
+    }
+
+    @media (max-width: 700px) {
+      .detail-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .detail-block {
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 10px;
+      background: rgba(8, 10, 18, 0.9);
+    }
+
+    .detail-block h3 {
+      font-size: 0.85rem;
+      letter-spacing: 0.14em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .detail-block ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.85rem;
+    }
+
+    .detail-block li::before {
+      content: "• ";
+      color: var(--accent);
+    }
+
+    .hint {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>ROTA 66 — GUIA 21 DIAS</h1>
+      <p>Seleciona um lugar em qualquer dia para ver <strong>PONTOS DE INTERESSE</strong> e <strong>HISTÓRIA</strong>.</p>
+    </header>
+
+    <div class="layout">
+      <section class="panel">
+        <div class="panel-title">ITINERÁRIO DIA A DIA</div>
+        <div class="days-list" id="daysList"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">DETALHE DO LUGAR</div>
+        <div id="detail">
+          <div class="detail-header">
+            <div class="detail-label">SELECIONA UM LUGAR</div>
+            <div class="detail-title">NENHUM LUGAR SELECIONADO</div>
+            <div class="detail-meta">Toca num ponto do itinerário à esquerda para ver mais informação.</div>
+          </div>
+          <div class="detail-body">
+            <div class="detail-block">
+              <h3>PONTOS DE INTERESSE</h3>
+              <ul><li>Lista de locais, experiências e paragens recomendadas.</li></ul>
+            </div>
+            <div class="detail-block">
+              <h3>HISTÓRIA</h3>
+              <ul><li>Contexto histórico e curiosidades sobre a Rota 66 e o local escolhido.</li></ul>
+            </div>
+          </div>
+          <p class="hint">DICA: idealmente 250–400 km por dia para aproveitar bem a estrada.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+
+<script>
+/* ============================================================
+   DADOS COMPLETOS — ITINERÁRIO ROTA 66 (21 DIAS)
+   ============================================================ */
+
+const itinerary = [
+  {
+    day: 1,
+    from: "CHICAGO, IL",
+    to: "JOLIET, IL",
+    distance: "≈ 70 km",
+    places: [
+      {
+        id: "chicago-begin",
+        name: "CHICAGO — BEGIN SIGN",
+        interest: [
+          "Placa histórica “BEGIN ROUTE 66” na Jackson Blvd.",
+          "Lou Mitchell’s — pequeno-almoço clássico de viajante.",
+          "Passeio rápido pelo centro (Loop, Willis Tower vista exterior)."
+        ],
+        history: [
+          "Ponto de partida oficial da Rota 66 desde 1926.",
+          "Chicago era o grande hub ferroviário e rodoviário do Midwest.",
+          "A rota ligava o coração industrial ao Oeste em expansão."
+        ]
+      },
+      {
+        id: "joliet",
+        name: "JOLIET",
+        interest: [
+          "Joliet Area Historical Museum & Route 66 Welcome Center.",
+          "Teatro Rialto Square (fachada icónica).",
+          "Primeiras placas e murais dedicados à Rota 66."
+        ],
+        history: [
+          "Joliet prosperou com o tráfego da Rota 66 e da indústria pesada.",
+          "Serviu como uma das primeiras paragens de abastecimento e descanso.",
+          "Hoje é uma das portas de entrada para o turismo da estrada."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 2,
+    from: "JOLIET, IL",
+    to: "BLOOMINGTON / NORMAL, IL",
+    distance: "≈ 210 km",
+    places: [
+      {
+        id: "gemini-giant",
+        name: "GEMINI GIANT — WILMINGTON",
+        interest: [
+          "Estátua gigante estilo “Muffler Man” com capacete espacial.",
+          "Ótimo spot para fotos clássicas da Rota 66.",
+          "Antigo restaurante Launching Pad."
+        ],
+        history: [
+          "Construído nos anos 60, simboliza a era espacial.",
+          "Os “Muffler Men” eram figuras publicitárias comuns nas estradas.",
+          "Ícone fotográfico da Rota 66 em Illinois."
+        ]
+      },
+      {
+        id: "pontiac",
+        name: "PONTIAC",
+        interest: [
+          "Illinois Route 66 Hall of Fame & Museum.",
+          "Murais gigantes dedicados à estrada.",
+          "Carro Pontiac clássico exposto no mural principal."
+        ],
+        history: [
+          "Pontiac revitalizou o centro com arte pública.",
+          "O museu preserva memórias de motéis e diners.",
+          "Um dos melhores pontos para entender a cultura da estrada."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 3,
+    from: "BLOOMINGTON, IL",
+    to: "SPRINGFIELD, IL",
+    distance: "≈ 110 km",
+    places: [
+      {
+        id: "lincoln",
+        name: "LINCOLN, IL",
+        interest: [
+          "Água-torre em forma de melancia.",
+          "Murais e placas da Rota 66.",
+          "Centro histórico compacto."
+        ],
+        history: [
+          "Cidade batizada por Abraham Lincoln.",
+          "A Rota 66 trouxe comércio e movimento.",
+          "Hoje vive do turismo nostálgico."
+        ]
+      },
+      {
+        id: "springfield-il",
+        name: "SPRINGFIELD, IL",
+        interest: [
+          "Cozy Dog Drive-In — corn dog original.",
+          "Museu Presidencial de Abraham Lincoln.",
+          "Neons e motéis clássicos."
+        ],
+        history: [
+          "Capital do Illinois e cidade de Lincoln.",
+          "Importante nó da Rota 66.",
+          "Negócios locais sobreviveram graças aos viajantes."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 4,
+    from: "SPRINGFIELD, IL",
+    to: "ST. LOUIS, MO",
+    distance: "≈ 160 km",
+    places: [
+      {
+        id: "chain-of-rocks",
+        name: "CHAIN OF ROCKS BRIDGE",
+        interest: [
+          "Ponte histórica sobre o Mississippi.",
+          "Vista ampla do rio.",
+          "Curva característica no meio da ponte."
+        ],
+        history: [
+          "Travessia icónica da Rota 66.",
+          "Construída em 1929.",
+          "Hoje é pedonal e símbolo nostálgico."
+        ]
+      },
+      {
+        id: "st-louis",
+        name: "ST. LOUIS",
+        interest: [
+          "Gateway Arch.",
+          "Bairros históricos.",
+          "Cenário urbano forte."
+        ],
+        history: [
+          "Grande ponto de passagem rumo ao Oeste.",
+          "A Rota 66 reforçou o papel da cidade.",
+          "O arco celebra a expansão americana."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 5,
+    from: "ST. LOUIS, MO",
+    to: "ROLLA / LEBANON, MO",
+    distance: "≈ 180 km",
+    places: [
+      {
+        id: "meramec-caverns",
+        name: "MERAMEC CAVERNS",
+        interest: [
+          "Grutas com visitas guiadas.",
+          "Cartazes antigos ao longo da rota.",
+          "Boa pausa do calor."
+        ],
+        history: [
+          "Atração clássica promovida com outdoors.",
+          "Ligada a lendas de Jesse James.",
+          "Mostra o turismo da estrada."
+        ]
+      },
+      {
+        id: "cuba-mo",
+        name: "CUBA, MO",
+        interest: [
+          "Cidade dos murais.",
+          "Diners e lojas temáticas.",
+          "Arte pública por todo o centro."
+        ],
+        history: [
+          "Revitalização através da arte.",
+          "Murais contam histórias locais.",
+          "Exemplo de renascimento da Rota 66."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 6,
+    from: "ROLLA / LEBANON, MO",
+    to: "SPRINGFIELD, MO",
+    distance: "≈ 170 km",
+    places: [
+      {
+        id: "route66-museum-lebanon",
+        name: "ROUTE 66 MUSEUM — LEBANON",
+        interest: [
+          "Museu gratuito.",
+          "Recriações de diners.",
+          "Objetos originais."
+        ],
+        history: [
+          "Paragem típica de pernoita.",
+          "Preserva ambiente dos anos 40–60.",
+          "Mostra importância dos pequenos negócios."
+        ]
+      },
+      {
+        id: "springfield-mo",
+        name: "SPRINGFIELD, MO",
+        interest: [
+          "Route 66 Car Museum.",
+          "Neons antigos.",
+          "Base para explorar Ozark."
+        ],
+        history: [
+          "“Birthplace of Route 66”.",
+          "Nome oficial usado aqui pela primeira vez.",
+          "Cresceu como nó rodoviário."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 7,
+    from: "SPRINGFIELD, MO",
+    to: "TULSA, OK",
+    distance: "≈ 290 km",
+    places: [
+      {
+        id: "gay-parita",
+        name: "GAY PARITA SINCLAIR STATION",
+        interest: [
+          "Posto recriado anos 30.",
+          "Bombas antigas.",
+          "Ambiente fotogénico."
+        ],
+        history: [
+          "Representa postos independentes.",
+          "Mantido por entusiastas.",
+          "Simboliza hospitalidade da estrada."
+        ]
+      },
+      {
+        id: "tulsa",
+        name: "TULSA",
+        interest: [
+          "Art Déco no centro.",
+          "Música ao vivo.",
+          "Trechos preservados da rota."
+        ],
+        history: [
+          "Cidade do petróleo.",
+          "Rota 66 consolidou importância.",
+          "Preserva herança da estrada."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 8,
+    from: "TULSA, OK",
+    to: "OKLAHOMA CITY, OK",
+    distance: "≈ 180 km",
+    places: [
+      {
+        id: "blue-whale",
+        name: "BLUE WHALE — CATOOSA",
+        interest: [
+          "Baleia azul gigante num lago.",
+          "Fotos divertidas.",
+          "Pequeno parque."
+        ],
+        history: [
+          "Construída nos anos 70.",
+          "Presente de marido para esposa.",
+          "Atração espontânea da rota."
+        ]
+      },
+      {
+        id: "arcadia-barn-pops",
+        name: "ARCADIA — ROUND BARN & POPS 66",
+        interest: [
+          "Celeiro redondo restaurado.",
+          "Pops 66 — garrafa gigante iluminada.",
+          "Pôr do sol incrível."
+        ],
+        history: [
+          "Celeiro de 1898 salvo por voluntários.",
+          "Pops é ícone moderno da rota.",
+          "Mostra continuidade da cultura de estrada."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 9,
+    from: "OKLAHOMA CITY, OK",
+    to: "CLINTON / ELK CITY, OK",
+    distance: "≈ 190 km",
+    places: [
+      {
+        id: "lucilles",
+        name: "LUCILLE’S HISTORIC GAS STATION",
+        interest: [
+          "Posto de dois andares.",
+          "Placas explicativas.",
+          "Paragem simbólica."
+        ],
+        history: [
+          "Lucille era a “Mother of the Mother Road”.",
+          "Atendeu viajantes por décadas.",
+          "Símbolo da hospitalidade."
+        ]
+      },
+      {
+        id: "clinton-museum",
+        name: "CLINTON ROUTE 66 MUSEUM",
+        interest: [
+          "Salas temáticas por décadas.",
+          "Neons e carros.",
+          "Museu imersivo."
+        ],
+        history: [
+          "Mostra evolução da estrada.",
+          "Impacto da I‑40 na rota.",
+          "Um dos melhores museus da Rota 66."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 10,
+    from: "CLINTON / ELK CITY, OK",
+    to: "AMARILLO, TX",
+    distance: "≈ 260 km",
+    places: [
+      {
+        id: "texas-border",
+        name: "FRONTEIRA OK / TX",
+        interest: [
+          "Placas de boas-vindas do Texas.",
+          "Paisagem plana e aberta.",
+          "Fotos com horizonte infinito."
+        ],
+        history: [
+          "Entrada no Panhandle do Texas.",
+          "Rota 66 aqui segue quase reta.",
+          "Trecho associado a longas viagens de camião."
+        ]
+      },
+      {
+        id: "amarillo",
+        name: "AMARILLO",
+        interest: [
+          "Big Texan Steak Ranch.",
+          "Neons e motéis clássicos.",
+          "Base para visitar o Cadillac Ranch."
+        ],
+        history: [
+          "Centro de transporte e gado.",
+          "Rota 66 trouxe motéis e diners.",
+          "Hoje mistura passado da rota e I‑40 moderna."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 11,
+    from: "AMARILLO, TX",
+    to: "TUCUMCARI, NM",
+    distance: "≈ 180 km",
+    places: [
+      {
+        id: "cadillac-ranch",
+        name: "CADILLAC RANCH",
+        interest: [
+          "Cadillacs enterrados de frente.",
+          "Grafitis livres — podes deixar a tua marca.",
+          "Paisagem surreal no campo."
+        ],
+        history: [
+          "Instalação artística de 1974 (grupo Ant Farm).",
+          "Símbolo do consumo e cultura pop.",
+          "Ícone absoluto da Rota 66."
+        ]
+      },
+      {
+        id: "tucumcari",
+        name: "TUCUMCARI",
+        interest: [
+          "Neons clássicos (Blue Swallow Motel).",
+          "Murais pela cidade.",
+          "Ambiente fotogénico à noite."
+        ],
+        history: [
+          "Cidade que viveu da Rota 66.",
+          "Muitos negócios fecharam com a I‑40.",
+          "Hoje é um dos locais mais autênticos da rota."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 12,
+    from: "TUCUMCARI, NM",
+    to: "SANTA FE, NM",
+    distance: "≈ 280 km",
+    places: [
+      {
+        id: "santa-rosa",
+        name: "SANTA ROSA",
+        interest: [
+          "Route 66 Auto Museum.",
+          "Blue Hole — poço de água azul.",
+          "Diners à beira da estrada."
+        ],
+        history: [
+          "Paragem típica de abastecimento.",
+          "Desvio original seguia depois para Santa Fe.",
+          "Cidade mantém ligação à rota através do museu."
+        ]
+      },
+      {
+        id: "santa-fe",
+        name: "SANTA FE",
+        interest: [
+          "Centro histórico em adobe.",
+          "Praça central e igrejas.",
+          "Ambiente cultural e calmo."
+        ],
+        history: [
+          "Fez parte do traçado original até 1937.",
+          "Desvio removido para encurtar via Albuquerque.",
+          "Uma das capitais mais antigas dos EUA."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 13,
+    from: "SANTA FE, NM",
+    to: "ALBUQUERQUE, NM",
+    distance: "≈ 100 km",
+    places: [
+      {
+        id: "albuquerque",
+        name: "ALBUQUERQUE",
+        interest: [
+          "66 Diner — decoração retro.",
+          "Old Town — praça e igreja.",
+          "Neons na Central Ave (antiga Rota 66)."
+        ],
+        history: [
+          "Principal eixo da Rota 66 no NM após 1937.",
+          "Cresceu com estrada e ferrovia.",
+          "Preserva muitos sinais e edifícios antigos."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 14,
+    from: "ALBUQUERQUE, NM",
+    to: "GALLUP, NM",
+    distance: "≈ 220 km",
+    places: [
+      {
+        id: "grants",
+        name: "GRANTS",
+        interest: [
+          "Murais e referências à Rota 66.",
+          "Paisagem vulcânica nas redondezas.",
+          "Boa pausa de meio-dia."
+        ],
+        history: [
+          "Ligada à mineração de urânio.",
+          "Rota 66 serviu como via de escoamento.",
+          "Hoje aposta no turismo de estrada e natureza."
+        ]
+      },
+      {
+        id: "gallup",
+        name: "GALLUP",
+        interest: [
+          "Hotel El Rancho.",
+          "Lojas de artesanato navajo e zuni.",
+          "Neons e fachadas antigas."
+        ],
+        history: [
+          "Centro ferroviário e de comércio indígena.",
+          "Rota 66 trouxe ainda mais movimento.",
+          "El Rancho ligou cinema e estrada."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 15,
+    from: "GALLUP, NM",
+    to: "HOLBROOK, AZ",
+    distance: "≈ 150 km",
+    places: [
+      {
+        id: "petrified-forest",
+        name: "PETRIFIED FOREST & PAINTED DESERT",
+        interest: [
+          "Troncos petrificados.",
+          "Miradouros panorâmicos.",
+          "Trechos da antiga Rota 66 dentro do parque."
+        ],
+        history: [
+          "Rota passava junto ao parque.",
+          "Parque protege fósseis com milhões de anos.",
+          "Natureza e estrada cruzam-se aqui de forma forte."
+        ]
+      },
+      {
+        id: "holbrook",
+        name: "HOLBROOK",
+        interest: [
+          "Wigwam Motel — quartos em forma de tenda.",
+          "Murais e lojas de souvenirs.",
+          "Ambiente muito old school."
+        ],
+        history: [
+          "Cidade típica de pernoita.",
+          "Wigwam é um dos motéis mais icónicos.",
+          "Preserva bem o espírito dos anos 50."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 16,
+    from: "HOLBROOK, AZ",
+    to: "FLAGSTAFF, AZ",
+    distance: "≈ 150 km",
+    places: [
+      {
+        id: "winslow",
+        name: "WINSLOW",
+        interest: [
+          "“Standin’ on the Corner Park”.",
+          "Murais e lojas na rua principal.",
+          "Boa paragem para fotos."
+        ],
+        history: [
+          "Importante nó ferroviário e rodoviário.",
+          "Canção “Take It Easy” trouxe fama renovada.",
+          "Rota 66 ajudou a manter o centro vivo."
+        ]
+      },
+      {
+        id: "flagstaff",
+        name: "FLAGSTAFF",
+        interest: [
+          "Centro histórico com bares e restaurantes.",
+          "Neons e hotéis antigos.",
+          "Base para visitar o Grand Canyon (desvio)."
+        ],
+        history: [
+          "Ponto estratégico entre desertos e montanhas.",
+          "Rota 66 trouxe turismo e comércio.",
+          "Hoje mistura cultura universitária e nostalgia."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 17,
+    from: "FLAGSTAFF, AZ",
+    to: "WILLIAMS, AZ",
+    distance: "≈ 50 km",
+    places: [
+      {
+        id: "williams",
+        name: "WILLIAMS",
+        interest: [
+          "Rua principal cheia de neons, diners e motéis.",
+          "Comboio turístico para o Grand Canyon.",
+          "Ambiente muito vivo à noite."
+        ],
+        history: [
+          "Última cidade da Rota 66 a ser contornada pela I‑40 (1984).",
+          "Resistiu apostando no turismo.",
+          "Um dos locais mais autênticos da rota no Arizona."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 18,
+    from: "WILLIAMS, AZ",
+    to: "SELIGMAN / KINGMAN, AZ",
+    distance: "≈ 190 km",
+    places: [
+      {
+        id: "seligman",
+        name: "SELIGMAN",
+        interest: [
+          "Lojas cheias de objetos retro e humor.",
+          "Carros antigos e manequins.",
+          "Ótimo para fotos e compras temáticas."
+        ],
+        history: [
+          "Berço do renascimento da Rota 66.",
+          "Angelo Delgadillo liderou o movimento de preservação.",
+          "Cidade vive quase inteiramente da mística da estrada."
+        ]
+      },
+      {
+        id: "hackberry",
+        name: "HACKBERRY GENERAL STORE",
+        interest: [
+          "Loja/museu com bombas antigas, carros e placas.",
+          "Ambiente muito fotogénico.",
+          "Paragem obrigatória para sentir o velho posto de estrada."
+        ],
+        history: [
+          "Hackberry foi pequena comunidade servida pela Rota 66.",
+          "A general store tornou-se ícone pela preservação de objetos.",
+          "É um dos spots mais fotografados da rota."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 19,
+    from: "KINGMAN, AZ",
+    to: "OATMAN / NEEDLES, CA",
+    distance: "≈ 140 km",
+    places: [
+      {
+        id: "oatman",
+        name: "OATMAN",
+        interest: [
+          "Cidade mineira fantasma parcialmente revitalizada.",
+          "Burros selvagens pelas ruas.",
+          "Lojas e pequenos espetáculos encenados."
+        ],
+        history: [
+          "Antiga cidade mineira de ouro.",
+          "Quase abandonada após declínio da mineração.",
+          "Turismo da Rota 66 trouxe nova vida."
+        ]
+      },
+      {
+        id: "needles",
+        name: "NEEDLES",
+        interest: [
+          "Entrada na Califórnia pela Rota 66.",
+          "Paisagem desértica intensa.",
+          "Motéis e neons antigos."
+        ],
+        history: [
+          "Importante ponto de travessia do Rio Colorado.",
+          "Rota 66 ligava aqui Arizona à Califórnia.",
+          "Calor extremo marcou muitos viajantes."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 20,
+    from: "NEEDLES, CA",
+    to: "BARSTOW, CA",
+    distance: "≈ 240 km",
+    places: [
+      {
+        id: "bottle-tree",
+        name: "ELMER’S BOTTLE TREE RANCH",
+        interest: [
+          "“Floresta” de árvores feitas de garrafas.",
+          "Instalação artística única e fotogénica.",
+          "Jogos de luz com o sol nas garrafas."
+        ],
+        history: [
+          "Criado por Elmer Long ao longo de décadas.",
+          "Exemplo de arte outsider de estrada.",
+          "Paragem obrigatória na Rota 66 moderna."
+        ]
+      },
+      {
+        id: "barstow",
+        name: "BARSTOW",
+        interest: [
+          "Route 66 Mother Road Museum.",
+          "Murais e sinais antigos.",
+          "Ponto de transição entre deserto e zonas urbanas."
+        ],
+        history: [
+          "Nó ferroviário e rodoviário importante.",
+          "Rota 66 e I‑40 consolidaram o papel da cidade.",
+          "Museu celebra a história da “Mother Road”."
+        ]
+      }
+    ]
+  },
+
+  {
+    day: 21,
+    from: "BARSTOW, CA",
+    to: "SANTA MONICA, CA",
+    distance: "≈ 230 km",
+    places: [
+      {
+        id: "san-bernardino",
+        name: "SAN BERNARDINO / RIALTO",
+        interest: [
+          "Wigwam Motel (tendas icónicas).",
+          "Trechos urbanos da antiga Rota 66.",
+          "Neons e sinais dispersos."
+        ],
+        history: [
+          "Zona densamente urbanizada que cresceu com o automóvel.",
+          "Rota 66 aqui tornou-se avenida urbana.",
+          "Motéis em forma de tenda são símbolo da era dourada."
+        ]
+      },
+      {
+        id: "santa-monica",
+        name: "SANTA MONICA PIER — END OF THE TRAIL",
+        interest: [
+          "Placa “End of the Trail” no pier.",
+          "Vista sobre o Pacífico e a praia.",
+          "Passeio final ao pôr do sol."
+        ],
+        history: [
+          "Ponto final simbólico da Rota 66 desde meados dos anos 30.",
+          "Marca a chegada ao Oceano Pacífico após quase 4 000 km.",
+          "Hoje é mais um símbolo emocional do que fim oficial de estrada."
+        ]
+      }
+    ]
+  }
+];
+
+/* ============================================================
+   LÓGICA DA INTERFACE
+   ============================================================ */
+
+const daysListEl = document.getElementById("daysList");
+const detailEl = document.getElementById("detail");
+
+function renderDays() {
+  itinerary.forEach(day => {
+    const card = document.createElement("div");
+    card.className = "day-card";
+
+    const header = document.createElement("div");
+    header.className = "day-header";
+    header.innerHTML = `
+      <span>DIA ${String(day.day).padStart(2, "0")}</span>
+      <span>${day.distance}</span>
+    `;
+
+    const main = document.createElement("div");
+    main.className = "day-main";
+    main.textContent = `${day.from} → ${day.to}`;
+
+    const placesWrap = document.createElement("div");
+    placesWrap.className = "places";
+
+    day.places.forEach(place => {
+      const pill = document.createElement("button");
+      pill.type = "button";
+      pill.className = "place-pill";
+      pill.textContent = place.name;
+      pill.addEventListener("click", () => selectPlace(day, place, pill));
+      placesWrap.appendChild(pill);
+    });
+
+    card.appendChild(header);
+    card.appendChild(main);
+    card.appendChild(placesWrap);
+    daysListEl.appendChild(card);
+  });
+}
+
+function clearActivePills() {
+  document.querySelectorAll(".place-pill.active").forEach(el => {
+    el.classList.remove("active");
+  });
+}
+
+function selectPlace(day, place, pillEl) {
+  clearActivePills();
+  pillEl.classList.add("active");
+
+  detailEl.innerHTML = `
+    <div class="detail-header">
+      <div class="detail-label">LUGAR SELECIONADO</div>
+      <div class="detail-title">${place.name}</div>
+      <div class="detail-meta">
+        DIA ${String(day.day).padStart(2, "0")} · ${day.from} → ${day.to} · ${day.distance}
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-block">
+        <h3>PONTOS DE INTERESSE</h3>
+        <ul>${place.interest.map(i => `<li>${i}</li>`).join("")}</ul>
+      </div>
+      <div class="detail-block">
+        <h3>HISTÓRIA</h3>
+        <ul>${place.history.map(h => `<li>${h}</li>`).join("")}</ul>
+      </div>
+    </div>
+    <p class="hint">PODES CONTINUAR A EXPLORAR OUTROS DIAS E LUGARES NA COLUNA ESQUERDA.</p>
+  `;
+}
+
+renderDays();
+</script>
+</body>
+</html>
